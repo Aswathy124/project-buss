@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+
 class DayscholarView extends StatefulWidget {
   const DayscholarView({Key? key}) : super(key: key);
 
@@ -91,6 +92,51 @@ class _DayscholarViewState extends State<DayscholarView> {
                           color: Colors.white), // Set text color to white
                     ),
                   ],
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete, color: Colors.white), // Delete icon
+                  onPressed: () async {
+                    // Replace 'your_backend_url' with the actual URL of your backend server
+                    final deleteUrl = Uri.parse(
+                        'http://localhost:3006/api/delete/dayscholar/${detail['_id']}');
+                    try {
+                      final response = await http.delete(deleteUrl);
+                      if (response.statusCode == 200) {
+                        // If the server returns a 200 OK response, remove the deleted detail from the list
+                        setState(() {
+                          dayDetails.removeAt(index);
+                        });
+                        // Show a snackbar to confirm deletion
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Student detail deleted successfully'),
+                          ),
+                        );
+                      } else {
+                        // If the server returns an error response, show an error message
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Error'),
+                              content: Text('Failed to delete student detail'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    } catch (error) {
+                      // Handle any errors that occur during the HTTP request
+                      print('Error: $error');
+                    }
+                  },
                 ),
               ),
             );

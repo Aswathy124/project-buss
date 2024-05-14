@@ -1,8 +1,10 @@
-import 'package:buspassfinal/Hostler.dart';
-import 'package:buspassfinal/MailPage.dart';
-import 'package:buspassfinal/Register.dart';
-import 'package:buspassfinal/facultysub.dart';
+import 'package:buspassfinal/vehicle%20booking.dart';
 import 'package:flutter/material.dart';
+import 'Hostler.dart';
+import 'MailPage.dart';
+import 'Register.dart';
+import 'facultysub.dart';
+
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -54,13 +56,19 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       case 'Day Scholar':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>Register()),
+          MaterialPageRoute(builder: (context) => Register()),
         );
-       break;
+        break;
       case 'Request to Faculty':
         Navigator.push(
-         context,
-        MaterialPageRoute(builder: (context) => FacultySub()),
+          context,
+          MaterialPageRoute(builder: (context) => FacultySub()),
+        );
+        break;
+      case 'Vehicle Booking': // New case for vehicle booking
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => VehicleBooking()),
         );
         break;
       default:
@@ -82,7 +90,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             icon: Icon(Icons.mail_outline_outlined, color: Colors.white),
             onPressed: () {
               Navigator.push(
-               context,MaterialPageRoute(builder: (context) => MailPage()),
+                context,
+                MaterialPageRoute(builder: (context) => MailPage()),
               );
             },
           ),
@@ -114,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
               ),
               ListTile(
                 title: Text(
-                  'Hostler',
+                  'Bus Pass',
                   style: TextStyle(color: Colors.white), // Set the text color to white
                 ),
                 onTap: () {
@@ -123,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
               ),
               ListTile(
                 title: Text(
-                  'Day Scholar',
+                  'Concession Card',
                   style: TextStyle(color: Colors.white), // Set the text color to white
                 ),
                 onTap: () {
@@ -139,6 +148,15 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   navigateToPage('Request to Faculty');
                 },
               ),
+              ListTile( // New ListTile for Vehicle Booking
+                title: Text(
+                  'Vehicle Booking',
+                  style: TextStyle(color: Colors.white), // Set the text color to white
+                ),
+                onTap: () {
+                  navigateToPage('Vehicle Booking');
+                },
+              ),
             ],
           ),
         ),
@@ -149,12 +167,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Opacity(
-                opacity: 0.7,
-                child: Image.asset(
-                  'assets/fisat2.webp',
-                  fit: BoxFit.cover,
-                ),
+              Image.asset(
+                'assets/fisat8.jpg',
+                fit: BoxFit.cover,
               ),
               Positioned(
                 top: MediaQuery.of(context).size.height / 4 + _top,
@@ -167,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(1.0), // Set the opacity to 1.0 for fully opaque white
+                      color: Colors.white, // Set the opacity to 1.0 for fully opaque white
                     ),
                     textAlign: TextAlign.center,
                   ),

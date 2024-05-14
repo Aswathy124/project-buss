@@ -42,7 +42,7 @@ class AdminDashboard extends StatelessWidget {
                 'HOSTLERS',
                     () {
                   // Navigate to Hostlerview
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Hostlerview()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PassDetailsPage()));
                 },
               ),
               SizedBox(height: 20),
@@ -56,17 +56,7 @@ class AdminDashboard extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) =>DayscholarView()));
                 },
               ),
-              SizedBox(height: 20),
-              _buildGradientBox(
-                context,
-                Colors.blue,
-                Colors.purple,
-                'REQUEST FOR FACULTY',
-                    () {
-                  // Navigate to page 3
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>ViewAllHodsScreen()));
-                },
-              ),
+
             ],
           ),
         ),

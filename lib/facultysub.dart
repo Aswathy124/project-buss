@@ -1,7 +1,7 @@
-import 'package:buspassfinal/MODEL/request.dart';
 import 'package:buspassfinal/SERVICE/request.dart';
 import 'package:flutter/material.dart';
 
+import 'MODEL/request.dart';
 
 class FacultySub extends StatefulWidget {
   const FacultySub({Key? key}) : super(key: key);
@@ -23,9 +23,12 @@ class _FacultySubState extends State<FacultySub> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
       body: Container(
         decoration: BoxDecoration(
+          color: Colors.black, // Change color to black
           image: DecorationImage(
             image: AssetImage("assets/image1.jpg"),
             fit: BoxFit.cover,
@@ -49,29 +52,61 @@ class _FacultySubState extends State<FacultySub> {
                   ),
                   SizedBox(height: 20),
                   // Container for input fields
-                  Container(
+                  Padding(
                     padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: Column(
                       children: [
-                        _buildFormField(_nameController, 'Name of the Student', Icons.person),
+                        _buildFormField(
+                          _nameController,
+                          'Name of the Student',
+                          Icons.person,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_departmentController, 'Department', Icons.school),
+                        _buildFormField(
+                          _departmentController,
+                          'Department',
+                          Icons.school,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_reasonController, 'Reason to Have Bus', Icons.info, largeText: true),
+                        _buildFormField(
+                          _reasonController,
+                          'Reason to Have Bus',
+                          Icons.info,
+                          largeText: true,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_studentEmailController, 'student email', Icons.email, largeText: true),
+                        _buildFormField(
+                          _studentEmailController,
+                          'Student Email',
+                          Icons.email,
+                          largeText: true,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_hodNameController, 'hod name', Icons.person, largeText: true),
+                        _buildFormField(
+                          _hodNameController,
+                          'HOD Name',
+                          Icons.person,
+                          largeText: true,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_hodMailController, 'HOD Mail ID', Icons.email),
+                        _buildFormField(
+                          _hodMailController,
+                          'HOD Mail ID',
+                          Icons.email,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_tutorNameController, 'tutor name', Icons.person, largeText: true),
+                        _buildFormField(
+                          _tutorNameController,
+                          'Tutor Name',
+                          Icons.person,
+                          largeText: true,
+                        ),
                         SizedBox(height: 10),
-                        _buildFormField(_tutorMailController, 'Tutor Mail ID', Icons.email),
+                        _buildFormField(
+                          _tutorMailController,
+                          'Tutor Mail ID',
+                          Icons.email,
+                        ),
                       ],
                     ),
                   ),
@@ -86,7 +121,7 @@ class _FacultySubState extends State<FacultySub> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.black,
                     ),
                   ),
                 ],
@@ -98,31 +133,44 @@ class _FacultySubState extends State<FacultySub> {
     );
   }
 
-  Widget _buildFormField(TextEditingController controller, String labelText, IconData iconData, {bool largeText = false}) {
-    return Row(
-      children: [
-        Icon(iconData, color: Colors.grey),
-        SizedBox(width: 10),
-        Expanded(
-          child: TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              labelText: labelText,
-              border: InputBorder.none,
-            ),
-            style: TextStyle(fontSize: largeText ? 18 : 14),
-          ),
+  Widget _buildFormField(
+      TextEditingController controller,
+      String labelText,
+      IconData iconData, {
+        bool largeText = false,
+      }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(iconData, color: Colors.white),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
         ),
-      ],
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.black.withOpacity(0.5),
+        labelStyle: TextStyle(color: Colors.white),
+      ),
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: largeText ? 18 : 14,
+      ),
     );
   }
 
   void _submitForm() async {
+    // Create a HodModel instance with the form data
     final hod = HodModel(
       name: _nameController.text,
       department: _departmentController.text,
       reason: _reasonController.text,
-      bus: 'Bus', // You can set default bus value here
+      bus: 'Bus',
+      // You can set default bus value here
       studentEmail: _studentEmailController.text,
       hodName: _hodNameController.text,
       hodMail: _hodMailController.text,
@@ -131,7 +179,9 @@ class _FacultySubState extends State<FacultySub> {
     );
 
     try {
+      // Call a service method to submit the form data
       await HodService.submitHodForm(hod);
+
       // Handle success, show a dialog or navigate to another page
       showDialog(
         context: context,

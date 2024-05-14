@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:buspassfinal/ProfilePage.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:buspassfinal/ProfilePage.dart';
 
 class UserDetailsForm extends StatefulWidget {
   @override
@@ -20,6 +20,50 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
   String _userType = 'hostler';
   bool _obscurePassword = true;
 
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required';
+    }
+    final nameRegex = RegExp(r'^[a-zA-Z]+$');
+    if (!nameRegex.hasMatch(value)) {
+      return 'Name should only contain alphabetic characters';
+    }
+    return null;
+  }
+
+  String? _validateAdmissionNo(String? value) {
+    if (_userType != 'staff' && (value == null || value.isEmpty)) {
+      return 'Admission number is required';
+    }
+    final admissionNoRegex = RegExp(r'^[0-9]+$');
+    if (!admissionNoRegex.hasMatch(value!)) {
+      return 'Admission number should only contain numeric characters';
+    }
+    return null;
+  }
+
+  String? _validateEmpId(String? value) {
+    if (_userType == 'staff' && (value == null || value.isEmpty)) {
+      return 'Employee ID is required';
+    }
+    final empIdRegex = RegExp(r'^[0-9]+$');
+    if (!empIdRegex.hasMatch(value!)) {
+      return 'Employee ID should only contain numeric characters';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Enter a valid email';
+    }
+    return null;
+  }
+
   Future<void> _addUserDetails() async {
     final url = Uri.parse('http://localhost:3006/api/details/add');
     try {
@@ -29,8 +73,8 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
         body: jsonEncode({
           'name': _nameController.text,
           'userType': _userType,
-          'admissionNo': _admissionNoController.text,
-          'empId': _empIdController.text,
+          if (_userType == 'staff') 'empId': _empIdController.text,
+          if (_userType == 'hostler' || _userType == 'dayscholar') 'admissionNo': _admissionNoController.text,
           'email': _emailController.text,
           'password': _passwordController.text,
         }),
@@ -114,12 +158,7 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        return null;
-                      },
+                      validator: _validateName,
                     ),
                   ),
                   Container(
@@ -183,11 +222,11 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: _admissionNoController,
+                      controller: _userType == 'staff' ? _empIdController : _admissionNoController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: 'Admission No.',
-                        prefixIcon: Icon(Icons.confirmation_number, color: Colors.white),
+                        labelText: _userType == 'staff' ? 'Employee ID' : 'Admission No.',
+                        prefixIcon: Icon(_userType == 'staff' ? Icons.work : Icons.confirmation_number, color: Colors.white),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(8),
@@ -195,42 +234,9 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
-                      validator: (value) {
-                        if (_userType != 'staff' && value!.isEmpty) {
-                          return 'Please enter admission number';
-                        }
-                        return null;
-                      },
+                      validator: _userType == 'staff' ? _validateEmpId : _validateAdmissionNo,
                     ),
                   ),
-                  if (_userType == 'staff')
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextFormField(
-                        controller: _empIdController,
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          labelText: 'Employee ID',
-                          prefixIcon: Icon(Icons.work, color: Colors.white),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                          labelStyle: TextStyle(color: Colors.white),
-                        ),
-                        validator: (value) {
-                          if (_userType == 'staff' && value!.isEmpty) {
-                            return 'Please enter employee ID';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
@@ -250,12 +256,7 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null;
-                      },
+                      validator: _validateEmail,
                     ),
                   ),
                   Container(
@@ -299,12 +300,12 @@ class _UserDetailsFormState extends State<UserDetailsForm> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ProfilePage()),
-                        );
                         if (_formKey.currentState!.validate()) {
                           _addUserDetails();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProfilePage()),
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(

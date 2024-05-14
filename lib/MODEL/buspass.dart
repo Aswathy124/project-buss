@@ -5,7 +5,7 @@ class BusPassModel {
   final String from;
   final String to;
   final int numberOfPasses;
-
+  final DateTime date; // Define date here
 
   BusPassModel({
     required this.name,
@@ -13,10 +13,9 @@ class BusPassModel {
     required this.admissionNo,
     required this.from,
     required this.to,
-    required this.numberOfPasses, required DateTime date,
+    required this.numberOfPasses,
+    required this.date, // Include date in the constructor
   });
-
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -26,6 +25,7 @@ class BusPassModel {
       'from': from,
       'to': to,
       'numberOfPasses': numberOfPasses,
+      'date': date.toIso8601String(), // Serialize date to a string
     };
   }
 }

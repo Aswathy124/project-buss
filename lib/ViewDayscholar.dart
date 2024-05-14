@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 
 class ViewDayscholar extends StatelessWidget {
@@ -27,6 +22,9 @@ class ViewDayscholar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(
@@ -92,8 +90,8 @@ class ViewDayscholar extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await downloadPdf();
+        onPressed: () {
+          downloadPdf();
         },
         child: Icon(Icons.file_download),
         backgroundColor: Colors.blue,
@@ -102,29 +100,12 @@ class ViewDayscholar extends StatelessWidget {
     );
   }
 
-  Future<void> downloadPdf() async {
-    final url = 'http://localhost:3006/api/download/download';
+  void downloadPdf() async {
+    final url = 'http://localhost:3006/api/download/download?' // Add '?' here
+        'name=$name&department=$department&admissionNo=$admissionNo&place=$place&busNo=$busNo';
 
-    final response = await http.post(
-      Uri.parse(url),
-      body: {
-        'name': name,
-        'department': department,
-        'admissionNo': admissionNo,
-        'place': place,
-        'busNo': busNo,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final pdfBytes = response.bodyBytes;
-      final output = await getTemporaryDirectory();
-      final file = File('${output.path}/example.pdf');
-      await file.writeAsBytes(pdfBytes);
-      await OpenFile.open(file.path);
-    } else {
-      throw Exception('Failed to load PDF: ${response.statusCode}');
-    }
+    // Launch the download URL in the browser
+    await launch(url);
   }
-}
 
+}

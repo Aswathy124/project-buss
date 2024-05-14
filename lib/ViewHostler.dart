@@ -1,23 +1,30 @@
+import 'package:buspassfinal/PaymentPage.dart';
 import 'package:flutter/material.dart';
 import 'MODEL/buspass.dart';
 
 class ViewHostler extends StatelessWidget {
   final BusPassModel busPass;
-  final DateTime currentDate; // Add a DateTime parameter
+  final DateTime currentDate;
+  final DateTime passExpiryDate;
 
-  const ViewHostler({Key? key, required this.busPass, required this.currentDate}) : super(key: key);
+  const ViewHostler({
+    Key? key,
+    required this.busPass,
+    required this.currentDate,
+    required this.passExpiryDate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Set background color of Scaffold to transparent
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Set background color of AppBar to transparent
-        elevation: 0, // Remove the shadow
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back), // Back icon
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); // Navigate back when the back icon is pressed
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -26,8 +33,8 @@ class ViewHostler extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 5), // Add border
-              borderRadius: BorderRadius.circular(20), // Add border radius
+              border: Border.all(color: Colors.black, width: 5),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,27 +44,19 @@ class ViewHostler extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage('assets/fisats.jpg'), // Provide the path to the image
-                        radius: 30, // Set the radius of the avatar
+                        backgroundImage: AssetImage('assets/fisats.jpg'),
+                        radius: 30,
                       ),
-                      SizedBox(width: 10), // Add space between avatar and text
+                      SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Federal Institute',
+                            'Federal Institute of',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Set text color to black
-                            ),
-                          ),
-                          Text(
-                            'of',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Set text color to black
+                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -65,7 +64,7 @@ class ViewHostler extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Set text color to black
+                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -84,42 +83,32 @@ class ViewHostler extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black, // Set text color to black
+                          color: Colors.black,
                         ),
                       ),
                       SizedBox(height: 20),
-                      Text('Name: ${busPass.name}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('Department: ${busPass.department}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('Admission No: ${busPass.admissionNo}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('From: ${busPass.from}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('To: ${busPass.to}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('Number of Passes: ${busPass.numberOfPasses}', style: TextStyle(color: Colors.black)), // Set text color to black
-                      Text('Date: ${currentDate.day}/${currentDate.month}/${currentDate.year}', style: TextStyle(color: Colors.black)), // Display the current date, Set text color to black
+                      Text('Name: ${busPass.name}', style: TextStyle(color: Colors.black)),
+                      Text('Department: ${busPass.department}', style: TextStyle(color: Colors.black)),
+                      Text('Admission No: ${busPass.admissionNo}', style: TextStyle(color: Colors.black)),
+                      Text('From: ${busPass.from}', style: TextStyle(color: Colors.black)),
+                      Text('To: ${busPass.to}', style: TextStyle(color: Colors.black)),
+                      Text('Number of Passes: ${busPass.numberOfPasses}', style: TextStyle(color: Colors.black)),
+                      Text('Date: ${currentDate.day}/${currentDate.month}/${currentDate.year}', style: TextStyle(color: Colors.black)),
+                      Text('Pass Expiry Date: ${passExpiryDate.day}/${passExpiryDate.month}/${passExpiryDate.year}', style: TextStyle(color: Colors.black)),
                     ],
                   ),
                 ),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Pricing Information',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      _buildPassPrice('1 pass', '60 rupees'),
-                      _buildPassPrice('2 passes', '120 rupees'),
-                      _buildPassPrice('3 passes', '180 rupees'),
-                      _buildPassPrice('4 passes', '240 rupees'),
-                      _buildPassPrice('5 passes', '300 rupees'),
-                      _buildPassPrice('6 passes', '360 rupees'),
-                    ],
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PricingPage()),
+                      );
+                    },
+                    child: Text('View Pricing Information'),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -128,47 +117,104 @@ class ViewHostler extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Positioned(
-        bottom: 0,
-        right: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0), // Adjust the padding here
-          child: FloatingActionButton(
-            onPressed: () {
-              // Add your onPressed logic here
-            },
-            child: Icon(Icons.payment), // Pay icon
-            // Set background color to black
+    );
+  }
+}
+
+class PricingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pricing Information',style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black, width: 5),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    'Fisat to Thrissur',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                _buildPricingInfo('1 pass', '60 rupees'),
+                _buildPricingInfo('2 passes', '120 rupees'),
+                _buildPricingInfo('3 passes', '180 rupees'),
+                _buildPricingInfo('4 passes', '240 rupees'),
+                _buildPricingInfo('5 passes', '300 rupees'),
+                _buildPricingInfo('6 passes', '360 rupees'),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    'Fisat to Angamaly',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                _buildPricingInfo('1 pass', '25 rupees'),
+                _buildPricingInfo('2 passes', '50 rupees'),
+                _buildPricingInfo('3 passes', '75 rupees'),
+                _buildPricingInfo('4 passes', '100 rupees'),
+                _buildPricingInfo('5 passes', '125 rupees'),
+                _buildPricingInfo('6 passes', '150 rupees'),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PaymentPage()),
+          );
+        },
+        child: Icon(Icons.payment),
+        backgroundColor: Colors.white,
       ),
     );
   }
 
-  Widget _buildPassPrice(String pass, String price) {
+  Widget _buildPricingInfo(String pass, String price) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            flex: 3,
-            child: Text(
-              pass,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+          Text(
+            pass,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              '- $price',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
+          Text(
+            '- $price',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
             ),
           ),
         ],

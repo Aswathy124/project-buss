@@ -1,5 +1,5 @@
-import 'package:buspassfinal/MODEL/buspass.dart';
 import 'package:flutter/material.dart';
+import 'package:buspassfinal/MODEL/buspass.dart';
 import 'package:buspassfinal/SERVICE/buspass.dart';
 import 'package:buspassfinal/ViewHostler.dart';
 
@@ -162,7 +162,7 @@ class _BusPassState extends State<BusPass> {
                             }
                             return null;
                           },
-                          items: <String>['Fisat', 'Thrissur']
+                          items: <String>['Fisat', 'Angamaly', 'Thrissur']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -190,7 +190,7 @@ class _BusPassState extends State<BusPass> {
                             }
                             return null;
                           },
-                          items: <String>['Fisat', 'Thrissur']
+                          items: <String>['Fisat', 'Angamaly', 'Thrissur']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -314,12 +314,53 @@ class _BusPassState extends State<BusPass> {
         numberOfPasses: _selectedPasses,
         date: _selectedDate,
       );
+
+      // Calculate pass validity based on the number of passes
+      Duration passValidityDuration;
+      switch (_selectedPasses) {
+        case 1:
+          passValidityDuration = Duration(days: 7); // 1 week
+          break;
+        case 2:
+          passValidityDuration = Duration(days: 14); // 2 weeks
+          break;
+        case 3:
+          passValidityDuration = Duration(days: 21); // 3 weeks
+          break;
+        case 4:
+          passValidityDuration = Duration(days: 28); // 4 weeks
+          break;
+        case 5:
+        case 6:
+          passValidityDuration = Duration(days: 30); // 1 month
+          break;
+        default:
+          passValidityDuration = Duration(days: 0); // Default to 0 days if unknown
+      }
+
+      // Calculate pass expiry date
+      final passExpiryDate = busPass.date.add(passValidityDuration);
+
       try {
         await _busPassService.submitBusPass(busPass);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Bus pass submitted successfully!'),
             duration: Duration(seconds: 3),
+          ),
+        );
+
+        // Get current date
+        DateTime currentDate = DateTime.now();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ViewHostler(
+              busPass: busPass,
+              currentDate: currentDate,
+              passExpiryDate: passExpiryDate,
+            ),
           ),
         );
       } catch (e) {
@@ -330,16 +371,6 @@ class _BusPassState extends State<BusPass> {
           ),
         );
       }
-
-      // Get current date
-      DateTime currentDate = DateTime.now();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ViewHostler(busPass: busPass, currentDate: currentDate),
-        ),
-      );
     }
   }
 }

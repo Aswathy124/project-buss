@@ -7,8 +7,6 @@ import 'SERVICE/registerday.dart';
 class Register extends StatefulWidget {
   const Register({Key? key});
 
-
-
   @override
   State<Register> createState() => _RegisterState();
 }
@@ -24,15 +22,12 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/image1.jpg'), // Add your background image path here
-              fit: BoxFit.cover,
-            ),
-          ),
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 80.0),
           child: Form(
             key: _formKey,
@@ -41,21 +36,23 @@ class _RegisterState extends State<Register> {
               children: [
                 SizedBox(height: 30.0),
                 Text(
-                  "Register",
+                  "CONCESSION CARD FORM",
                   style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
+
                 SizedBox(height: 20.0),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.black,
                   ),
                   padding: EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TextFormField(
+                        style: TextStyle(color: Colors.white), // Set text color to white
                         controller: _nameController,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -66,10 +63,12 @@ class _RegisterState extends State<Register> {
                         decoration: InputDecoration(
                           labelText: 'Name',
                           prefixIcon: Icon(Icons.person),
+                          labelStyle: TextStyle(color: Colors.white), // Set label color to white
                         ),
                       ),
                       SizedBox(height: 20),
                       TextFormField(
+                        style: TextStyle(color: Colors.white), // Set text color to white
                         controller: _departmentController,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -80,10 +79,12 @@ class _RegisterState extends State<Register> {
                         decoration: InputDecoration(
                           labelText: 'Department',
                           prefixIcon: Icon(Icons.business),
+                          labelStyle: TextStyle(color: Colors.white), // Set label color to white
                         ),
                       ),
                       SizedBox(height: 20),
                       TextFormField(
+                        style: TextStyle(color: Colors.white), // Set text color to white
                         controller: _admissionNoController,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -94,10 +95,12 @@ class _RegisterState extends State<Register> {
                         decoration: InputDecoration(
                           labelText: 'Admission No',
                           prefixIcon: Icon(Icons.confirmation_number),
+                          labelStyle: TextStyle(color: Colors.white), // Set label color to white
                         ),
                       ),
                       SizedBox(height: 20),
                       TextFormField(
+                        style: TextStyle(color: Colors.white), // Set text color to white
                         controller: _placeController,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -108,14 +111,17 @@ class _RegisterState extends State<Register> {
                         decoration: InputDecoration(
                           labelText: 'Place',
                           prefixIcon: Icon(Icons.location_on),
+                          labelStyle: TextStyle(color: Colors.white), // Set label color to white
                         ),
                       ),
                       SizedBox(height: 20),
                       TextFormField(
+                        style: TextStyle(color: Colors.white), // Set text color to white
                         controller: _busNoController,
                         decoration: InputDecoration(
                           labelText: 'Bus No',
                           prefixIcon: Icon(Icons.directions_bus),
+                          labelStyle: TextStyle(color: Colors.white), // Set label color to white
                         ),
                       ),
                       SizedBox(height: 20),
